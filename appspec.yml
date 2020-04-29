@@ -3,7 +3,8 @@ os: linux
 files:
   - source: /
     destination: /home/admin/ansible_test
-hooks:
-  ApplicationStart:
-    - location: ./deploy.py
-      runas: admin
+permissions:
+  - object: /home/admin/ansible_test
+    type: directory
+    owner: admin
+    group: admin
