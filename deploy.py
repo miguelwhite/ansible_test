@@ -8,13 +8,14 @@ PLAYBOOK_MAPS = {
 }
 
 command = '''
+pwd;
 pip install -r requirments.txt;
 {playbook_run};
 '''.format(playbook_run=PLAYBOOK_MAPS[os.environ.get('APPLICATION_NAME')])
 
 try:
     subprocess.check_output(
-      PLAYBOOK_MAPS[os.environ.get('APPLICATION_NAME')],
+      command,
       stderr=subprocess.STDOUT,
       cwd=os.getcwd(),
       shell=True
