@@ -8,8 +8,6 @@ PLAYBOOK_MAPS = {
 }
 
 command = '''
-pwd;
-ls -l;
 pip install -r requirments.txt;
 {playbook_run};
 '''.format(playbook_run=PLAYBOOK_MAPS[os.environ.get('APPLICATION_NAME')])
@@ -18,7 +16,7 @@ try:
     subprocess.check_output(
       command,
       stderr=subprocess.STDOUT,
-      cwd=os.getcwd(),
+      cwd='/home/admin/ansible_test',
       shell=True
     )
 except subprocess.CalledProcessError as e:
