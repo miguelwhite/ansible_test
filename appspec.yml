@@ -5,6 +5,7 @@ files:
     destination: /home/admin/ansible_test
 permissions:
   - object: /home/admin/ansible_test
-    type: directory
+    type:
+      - directory
     owner: admin
     group: admin
