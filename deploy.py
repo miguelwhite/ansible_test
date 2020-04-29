@@ -8,6 +8,8 @@ PLAYBOOK_MAPS = {
 }
 
 command = '''
+#!/bin/bash -l
+
 pip install -r requirments.txt;
 {playbook_run};
 '''.format(playbook_run=PLAYBOOK_MAPS[os.environ.get('APPLICATION_NAME')])
