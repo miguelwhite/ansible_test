@@ -3,3 +3,4 @@ os: linux
 hooks:
   ApplicationStart:
     - location: ./deploy.py
+      runas: admin
