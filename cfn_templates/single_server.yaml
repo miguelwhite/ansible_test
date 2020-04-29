@@ -1,0 +1,57 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Manages a Single EC2 Instance
+Parameters:
+  Ami:
+    Type: String
+  InstanceName:
+    Type: String
+  InstanceType:
+    Type: String
+  RootVolumeSize:
+    Type: String
+    Default: 25
+  SecurityGroupId:
+    Type: String
+  SecurityGroupId2:
+    Type: String
+    Default: 'n/a'
+  SubnetId:
+    Type: String
+  VpcId:
+    Type: String
+Conditions:
+  AddSecondSecurityGroup:
+    Fn::Not:
+      - Fn::Equals:
+        - Ref: SecurityGroupId2
+        - 'n/a'
+Resources:
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      BlockDeviceMappings:
+      - DeviceName: /dev/sda1
+        Ebs: {VolumeSize: {Ref: RootVolumeSize}, VolumeType: gp2}
+      IamInstanceProfile: {Ref: IamInstanceProfile}
+      ImageId: {Ref: Ami}
+      InstanceType: {Ref: InstanceType}
+      Monitoring: true
+      SecurityGroupIds:
+        - {Ref: SecurityGroupId}
+        - Fn::If:
+            - AddSecondSecurityGroup
+            - Ref: SecurityGroupId2
+            - {Ref: 'AWS::NoValue'}
+      SubnetId: {Ref: SubnetId}
+      UserData:
+        Fn::Base64: |
+          #cloud-config
+          users:
+            - name: admin
+              sudo: ALL=(ALL) NOPASSWD:ALL
+              shell: /bin/bash
+          power_state:
+            mode: reboot
+          runcmd:
+            - "echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCzrKOT2d9KbuMZ+CwIxG6ZKTSn7xUGXo1KS/uL3pHKFGjAiARdcIZ+eQ927oAMJJyQGU19Z58Sp5Bvit7nAZus9YuEHsGRyA42VA4L9qcL2H0c4XJecZiqF/2SW/rZTqaz7AnjrDjo0Z/oj91iuXWeWF9Egy/0JY3SjBwKbiLcbMgTb7g2vRcmBxveOgxFjjvlYFU2jCQdgZMDQLEx6VaWR5l4LCiWuZAqN+drrU9M3qqSzksDB0Oq5kBiKf6A34xBcLXBifHB6yf/EKxGTG+hjSZNCqaXlSrN/oAZgWWgeEJJNZdbykYwJtMMGyh/jqnmRR9CIXscF+o4i0rgZJvYKicQGTi+9s48xYB0r0KCFQqA6SQpan/ztVw5JaosApEYcblSpD0nlhCXqKQX0E6sdMVYA6VzqE2MwrK+OJo87yGAxLqZIkf5l/Yn0ERdu5FgnyL+uYDbsgSwQNIWCH3e7oNhsbUYv31AIOVlJbphU06wN7XGRy1rHGRy5KCJoyookrYLCLCsiyBaThRiBTZP0NAJZUriaMmC9r6EHX34nyLxxB4zUoW3UuuVJ4lq/h+Vz1FAoP/MEuIJW6I3VeSOkyr5ZyDFxjw0LRgX6TTWNUQBtI8Bin9j5rFn+G6WTDSM3r08DnePa8lRDKKUXTkCtg4aXmaRnXM8Et3gFW5ybQ==' >> /home/admin/.ssh/authorized_keys"

@@ -1,0 +1,23 @@
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - group_vars/common/vault
+  tasks:
+    - name: create test server
+      cloudformation:
+        region: us-east-1
+        stack_name: SingleServerTest
+        state: present
+        template: ../cfn_templates/single_server.yaml
+        tags:
+          configuration-source: github.com/miguelwhite/ansible_test
+          configuration-template: single_server.yaml
+        template_parameters:
+          Ami: "{{ ami }}"
+          InstanceName: single_server_test
+          InstanceType: t2.micro
+          RootVolumeSize: 25
+          SecurityGroupId: "{{ security_group_id }}"
+          SubnetId: "{{ subnet_id }}"
+          VpcId: "{{ vpc_id }}"
