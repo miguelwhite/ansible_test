@@ -17,6 +17,7 @@
           Ami: "{{ ami }}"
           InstanceName: single_server_test
           InstanceType: t2.micro
+          KeyName: "{{ key_name }}"
           RootVolumeSize: 25
           SecurityGroupId: "{{ security_group_id }}"
           SubnetId: "{{ subnet_id }}"
