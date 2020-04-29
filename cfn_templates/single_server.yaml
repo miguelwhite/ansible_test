@@ -33,7 +33,6 @@ Resources:
       BlockDeviceMappings:
       - DeviceName: /dev/sda1
         Ebs: {VolumeSize: {Ref: RootVolumeSize}, VolumeType: gp2}
-      IamInstanceProfile: {Ref: IamInstanceProfile}
       ImageId: {Ref: Ami}
       InstanceType: {Ref: InstanceType}
       Monitoring: true
