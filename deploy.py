@@ -4,7 +4,7 @@ import os
 import subprocess
 
 PLAYBOOK_MAPS = {
-  'create_server': '/home/admin/.local/bin/ansible-playbook -i inventories/localhost.ini playbooks/create_server.yaml -vvv'
+  'create_server': '/home/admin/.local/bin/ansible-playbook --vault-password-file /home/admin/.ansible_vault_pass -i inventories/localhost.ini playbooks/create_server.yaml -vvv'
 }
 
 command = '''
