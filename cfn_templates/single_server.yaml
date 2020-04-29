@@ -59,14 +59,5 @@ Resources:
             - Ref: SecurityGroupId2
             - {Ref: 'AWS::NoValue'}
       SubnetId: {Ref: SubnetId}
-      UserData:
-        Fn::Base64: |
-          #cloud-config
-          users:
-            - name: admin
-              sudo: ALL=(ALL) NOPASSWD:ALL
-              shell: /bin/bash
-          power_state:
-            mode: reboot
       Tags:
         - {Key: Name, Value: {Ref: InstanceName}}
