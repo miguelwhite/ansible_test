@@ -2,6 +2,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Manages a Single EC2 Instance
 Parameters:
+  AllocateEIP:
+    Type: String
+    Default: 'true'
   Ami:
     Type: String
   InstanceName:
@@ -26,7 +29,17 @@ Conditions:
       - Fn::Equals:
         - Ref: SecurityGroupId2
         - 'n/a'
+  AllocateEIPAddress:
+    Fn::Equals:
+      - Ref: AllocateEIP
+      - 'true'
 Resources:
+  Eip:
+    Type: AWS::EC2::EIP
+    Condition: AllocateEIPAddress
+    Properties:
+      InstanceId: {Ref: Instance}
+      Domain: vpc
   Instance:
     Type: AWS::EC2::Instance
     Properties:
@@ -54,3 +67,5 @@ Resources:
             mode: reboot
           runcmd:
             - "echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCzrKOT2d9KbuMZ+CwIxG6ZKTSn7xUGXo1KS/uL3pHKFGjAiARdcIZ+eQ927oAMJJyQGU19Z58Sp5Bvit7nAZus9YuEHsGRyA42VA4L9qcL2H0c4XJecZiqF/2SW/rZTqaz7AnjrDjo0Z/oj91iuXWeWF9Egy/0JY3SjBwKbiLcbMgTb7g2vRcmBxveOgxFjjvlYFU2jCQdgZMDQLEx6VaWR5l4LCiWuZAqN+drrU9M3qqSzksDB0Oq5kBiKf6A34xBcLXBifHB6yf/EKxGTG+hjSZNCqaXlSrN/oAZgWWgeEJJNZdbykYwJtMMGyh/jqnmRR9CIXscF+o4i0rgZJvYKicQGTi+9s48xYB0r0KCFQqA6SQpan/ztVw5JaosApEYcblSpD0nlhCXqKQX0E6sdMVYA6VzqE2MwrK+OJo87yGAxLqZIkf5l/Yn0ERdu5FgnyL+uYDbsgSwQNIWCH3e7oNhsbUYv31AIOVlJbphU06wN7XGRy1rHGRy5KCJoyookrYLCLCsiyBaThRiBTZP0NAJZUriaMmC9r6EHX34nyLxxB4zUoW3UuuVJ4lq/h+Vz1FAoP/MEuIJW6I3VeSOkyr5ZyDFxjw0LRgX6TTWNUQBtI8Bin9j5rFn+G6WTDSM3r08DnePa8lRDKKUXTkCtg4aXmaRnXM8Et3gFW5ybQ==' >> /home/admin/.ssh/authorized_keys"
+      tags:
+        - {Key: Name, Value: {Ref: InstanceName}}
