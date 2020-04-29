@@ -16,6 +16,7 @@ try:
     subprocess.check_output(
       PLAYBOOK_MAPS[os.environ.get('APPLICATION_NAME')],
       stderr=subprocess.STDOUT,
+      cwd=os.getcwd(),
       shell=True
     )
 except subprocess.CalledProcessError as e:
