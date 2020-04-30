@@ -8,7 +8,7 @@
       cloudformation:
         region: us-east-1
         stack_name: SingleServerTest
-        state: present
+        state: absent
         template: ../cfn_templates/single_server.yaml
         tags:
           configuration-source: github.com/miguelwhite/ansible_test
