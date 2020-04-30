@@ -9,3 +9,7 @@ permissions:
       - directory
     owner: admin
     group: admin
+hooks:
+  BeforeInstall:
+    - location: codedeploy/cleanup.sh
+      runas: admin
