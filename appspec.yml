@@ -12,4 +12,3 @@ permissions:
 hooks:
   BeforeInstall:
     - location: codedeploy/cleanup.sh
-      runas: admin
